@@ -36,4 +36,8 @@ export class DialogService {
     this.appRef.detachView(this.dialogComponentRef.hostView);
     this.dialogComponentRef.destroy();
   }
+
+  public open() {
+    this.appendDialogComponentToBody();
+  }
 }
