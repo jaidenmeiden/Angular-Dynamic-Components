@@ -1,9 +1,18 @@
-import { Injectable } from '@angular/core';
+import {ApplicationRef, ComponentFactoryResolver, ComponentRef, Injectable, Injector} from '@angular/core';
+import {DialogComponent} from "../components/dialog/dialog.component";
+import {DialogModule} from "../dialog.module";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: DialogModule
 })
 export class DialogService {
+  dialogComponentRef: ComponentRef<DialogComponent>;
 
-  constructor() { }
+  constructor(
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private appRef: ApplicationRef,
+    private injector: Injector
+  ) {}
+
+  appendDialogComponentToBody() {}
 }
