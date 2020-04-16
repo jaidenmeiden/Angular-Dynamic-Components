@@ -30,7 +30,11 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {}
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
+  }
 
   onOverlayClicked(evt: MouseEvent) {
     // close the dialog
