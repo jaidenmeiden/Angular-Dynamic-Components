@@ -21,7 +21,7 @@ export class DialogService {
     private injector: Injector
   ) {}
 
-  appendDialogComponentToBody() {
+  private appendDialogComponentToBody(){
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
     const componentRef = componentFactory.create(this.injector);
     this.appRef.attachView(componentRef.hostView);
@@ -30,5 +30,10 @@ export class DialogService {
     document.body.appendChild(domElem);
 
     this.dialogComponentRef = componentRef;
+  }
+
+  private removeDialogComponentFromBody() {
+    this.appRef.detachView(this.dialogComponentRef.hostView);
+    this.dialogComponentRef.destroy();
   }
 }
