@@ -17,5 +17,6 @@ export class DialogService {
   appendDialogComponentToBody() {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
     const componentRef = componentFactory.create(this.injector);
+    this.appRef.attachView(componentRef.hostView);
   }
 }
