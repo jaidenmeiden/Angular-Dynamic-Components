@@ -1,4 +1,11 @@
-import {ApplicationRef, ComponentFactoryResolver, ComponentRef, Injectable, Injector} from '@angular/core';
+import {
+  ApplicationRef,
+  ComponentFactoryResolver,
+  ComponentRef,
+  EmbeddedViewRef,
+  Injectable,
+  Injector
+} from '@angular/core';
 import {DialogComponent} from "../components/dialog/dialog.component";
 import {DialogModule} from "../dialog.module";
 
@@ -18,5 +25,10 @@ export class DialogService {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
     const componentRef = componentFactory.create(this.injector);
     this.appRef.attachView(componentRef.hostView);
+
+    const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+    document.body.appendChild(domElem);
+
+    this.dialogComponentRef = componentRef;
   }
 }
