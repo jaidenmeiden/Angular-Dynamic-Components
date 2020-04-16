@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -26,7 +26,7 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
   @ViewChild(InsertionDirective, {static: false}) insertionPoint: InsertionDirective;
 
   // and this:
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private cd: ChangeDetectorRef) {}
 
   ngAfterViewInit() {}
 
