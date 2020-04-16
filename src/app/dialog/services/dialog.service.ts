@@ -14,5 +14,7 @@ export class DialogService {
     private injector: Injector
   ) {}
 
-  appendDialogComponentToBody() {}
+  appendDialogComponentToBody() {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
+  }
 }
