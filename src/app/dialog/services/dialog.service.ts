@@ -4,7 +4,7 @@ import {
   ComponentRef,
   EmbeddedViewRef,
   Injectable,
-  Injector
+  Injector, Type
 } from '@angular/core';
 import {DialogComponent} from "../components/dialog/dialog.component";
 import {DialogModule} from "../dialog.module";
@@ -37,7 +37,9 @@ export class DialogService {
     this.dialogComponentRef.destroy();
   }
 
-  public open() {
+  public open(componentType: Type<any>) {
     this.appendDialogComponentToBody();
+
+    this.dialogComponentRef.instance.childComponentType = componentType;
   }
 }
