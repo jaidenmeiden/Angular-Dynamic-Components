@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, OnDestroy, Type} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  OnDestroy,
+  Type,
+  ViewChild
+} from '@angular/core';
+import {Subject} from "rxjs";
+import {InsertionDirective} from "../../directives/insertion.directive";
 
 @Component({
   selector: 'app-dialog',
@@ -6,13 +16,21 @@ import {AfterViewInit, Component, OnDestroy, Type} from '@angular/core';
   styleUrls: ['./dialog.component.css']
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
-  childComponentType: Type<any>;
+  private readonly _onClose = new Subject<any>();
 
-  ngAfterViewInit() {
-  }
+  public componentRef: ComponentRef<any>;
+  public childComponentType: Type<any>;
+  public onClose = this._onClose.asObservable();
 
-  ngOnDestroy() {
-  }
+  // add this:
+  @ViewChild(InsertionDirective, {static: false}) insertionPoint: InsertionDirective;
+
+  // and this:
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+
+  ngAfterViewInit() {}
+
+  ngOnDestroy() {}
 
   onOverlayClicked(evt: MouseEvent) {
     // close the dialog
