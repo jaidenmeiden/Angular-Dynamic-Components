@@ -39,4 +39,13 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
   onDialogClicked(evt: MouseEvent) {
     evt.stopPropagation()
   }
+
+  loadChildComponent(componentType: Type<any>) {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
+
+    let viewContainerRef = this.insertionPoint.viewContainerRef;
+    viewContainerRef.clear();
+
+    this.componentRef = viewContainerRef.createComponent(componentFactory);
+  }
 }
