@@ -10,6 +10,7 @@ import {DialogComponent} from "../components/dialog/dialog.component";
 import {DialogModule} from "../dialog.module";
 import {DialogConfig} from "../classes/dialog-config";
 import {DialogInjector} from "../injectors/dialog-injector";
+import {DialogRef} from "../classes/dialog-ref";
 
 @Injectable({
   providedIn: DialogModule
@@ -28,14 +29,33 @@ export class DialogService {
     const map = new WeakMap();
     map.set(DialogConfig, config);
 
+    // add the DialogRef to dependency injection
+    const dialogRef = new DialogRef();
+    map.set(DialogRef, dialogRef);
+
+    // we want to know when somebody called the close mehtod
+    const sub = dialogRef.afterClosed.subscribe(() => {
+      // close the dialog
+      this.removeDialogComponentFromBody();
+      sub.unsubscribe();
+    });
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
     const componentRef = componentFactory.create(new DialogInjector(this.injector, map));
+
     this.appRef.attachView(componentRef.hostView);
 
     const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
     document.body.appendChild(domElem);
 
     this.dialogComponentRef = componentRef;
+
+    this.dialogComponentRef.instance.onClose.subscribe(() => {
+      this.removeDialogComponentFromBody();
+    });
+
+    // return the dialogRef
+    return dialogRef;
   }
 
   private removeDialogComponentFromBody() {
@@ -44,9 +64,10 @@ export class DialogService {
   }
 
   public open(componentType: Type<any>, config: DialogConfig) {
-    this.appendDialogComponentToBody(config);
+    const dialogRef = this.appendDialogComponentToBody(config);
 
     this.dialogComponentRef.instance.childComponentType = componentType;
 
+    return dialogRef;
   }
 }
