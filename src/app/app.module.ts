@@ -14,9 +14,6 @@ import { ExampleComponent } from './components/example/example.component';
     BrowserModule,
     DialogModule
   ],
-  exports: [
-    ExampleComponent
-  ],
   entryComponents: [
     ExampleComponent
   ],

@@ -11,9 +11,6 @@ import { InsertionDirective } from './directives/insertion.directive';
   entryComponents: [
     DialogComponent
   ],
-  exports: [
-    DialogComponent
-  ],
   imports: [
     CommonModule
   ]
