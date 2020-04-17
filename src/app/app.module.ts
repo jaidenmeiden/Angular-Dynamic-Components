@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {DialogModule} from "./dialog/dialog.module";
-import { ExampleComponent } from './services/example/example.component';
+import { ExampleComponent } from './components/example/example.component';
 
 @NgModule({
   declarations: [
