@@ -10,8 +10,12 @@ import {DialogService} from "./dialog/services/dialog.service";
 export class AppComponent {
   title = 'angular-dynamic-components';
   constructor(public dialog: DialogService) {
-    this.dialog.open(ExampleComponent, {
+    const ref = this.dialog.open(ExampleComponent, {
       data: { message: 'I am a dynamic component inside of a dialog!' },
-    })
+    });
+
+    ref.afterClosed.subscribe(result => {
+      console.log('Dialog closed', result)
+    });
   }
 }
