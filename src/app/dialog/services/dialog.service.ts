@@ -24,18 +24,22 @@ export class DialogService {
     private injector: Injector
   ) {}
 
-  private appendDialogComponentToBody(config: DialogConfig){
-    // create a map with the config
+  public open(componentType: Type<any>, config: DialogConfig) {
+    const dialogRef = this.appendDialogComponentToBody(config);
+
+    this.dialogComponentRef.instance.childComponentType = componentType;
+
+    return dialogRef;
+  }
+
+  private appendDialogComponentToBody(config: DialogConfig) {
     const map = new WeakMap();
     map.set(DialogConfig, config);
 
-    // add the DialogRef to dependency injection
     const dialogRef = new DialogRef();
     map.set(DialogRef, dialogRef);
 
-    // we want to know when somebody called the close mehtod
     const sub = dialogRef.afterClosed.subscribe(() => {
-      // close the dialog
       this.removeDialogComponentFromBody();
       sub.unsubscribe();
     });
@@ -54,20 +58,11 @@ export class DialogService {
       this.removeDialogComponentFromBody();
     });
 
-    // return the dialogRef
     return dialogRef;
   }
 
   private removeDialogComponentFromBody() {
     this.appRef.detachView(this.dialogComponentRef.hostView);
     this.dialogComponentRef.destroy();
-  }
-
-  public open(componentType: Type<any>, config: DialogConfig) {
-    const dialogRef = this.appendDialogComponentToBody(config);
-
-    this.dialogComponentRef.instance.childComponentType = componentType;
-
-    return dialogRef;
   }
 }

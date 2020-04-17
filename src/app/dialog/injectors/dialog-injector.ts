@@ -10,8 +10,8 @@ export class DialogInjector implements Injector {
     token: Type<T> | InjectionToken<T>,
     notFoundValue?: T,
     flags?: InjectFlags
-  ): T
-  get(token: any, notFoundValue?: any)
+  ): T;
+  get(token: any, notFoundValue?: any);
   get(token: any, notFoundValue?: any, flags?: any) {
     const value = this._additionalTokens.get(token);
 

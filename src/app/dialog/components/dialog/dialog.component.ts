@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import {Subject} from "rxjs";
 import {InsertionDirective} from "../../directives/insertion.directive";
+import {DialogRef} from "../../classes/dialog-ref";
 
 @Component({
   selector: 'app-dialog',
@@ -16,19 +17,23 @@ import {InsertionDirective} from "../../directives/insertion.directive";
   styleUrls: ['./dialog.component.css']
 })
 export class DialogComponent implements AfterViewInit, OnDestroy {
-  private readonly _onClose = new Subject<any>();
+  componentRef: ComponentRef<any>;
 
-  public componentRef: ComponentRef<any>;
-  public childComponentType: Type<any>;
+  @ViewChild(InsertionDirective, {static: true}) insertionPoint: InsertionDirective;
+
+  private readonly _onClose = new Subject<any>();
   public onClose = this._onClose.asObservable();
 
-  // add this:
-  @ViewChild(InsertionDirective, {static: false}) insertionPoint: InsertionDirective;
+  childComponentType: Type<any>;
 
-  // and this:
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private cd: ChangeDetectorRef) {}
+  constructor(
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private cd: ChangeDetectorRef,
+    private dialogRef: DialogRef
+  ) {}
 
   ngAfterViewInit() {
+    console.log(this.childComponentType);
     this.loadChildComponent(this.childComponentType);
     this.cd.detectChanges();
   }
@@ -40,19 +45,25 @@ export class DialogComponent implements AfterViewInit, OnDestroy {
   }
 
   onOverlayClicked(evt: MouseEvent) {
-    // close the dialog
+    this.dialogRef.close();
   }
 
   onDialogClicked(evt: MouseEvent) {
-    evt.stopPropagation()
+    evt.stopPropagation();
   }
 
   loadChildComponent(componentType: Type<any>) {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
 
-    let viewContainerRef = this.insertionPoint.viewContainerRef;
+    const viewContainerRef = this.insertionPoint.viewContainerRef;
+    console.log(this.insertionPoint);
+    console.log(viewContainerRef);
     viewContainerRef.clear();
 
     this.componentRef = viewContainerRef.createComponent(componentFactory);
+  }
+
+  close() {
+    this._onClose.next();
   }
 }
