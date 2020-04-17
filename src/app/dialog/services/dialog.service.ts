@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import {DialogComponent} from "../components/dialog/dialog.component";
 import {DialogModule} from "../dialog.module";
+import {DialogConfig} from "../classes/dialog-config";
+import {DialogInjector} from "../injectors/dialog-injector";
 
 @Injectable({
   providedIn: DialogModule
@@ -21,9 +23,13 @@ export class DialogService {
     private injector: Injector
   ) {}
 
-  private appendDialogComponentToBody(){
+  private appendDialogComponentToBody(config: DialogConfig){
+    // create a map with the config
+    const map = new WeakMap();
+    map.set(DialogConfig, config);
+
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DialogComponent);
-    const componentRef = componentFactory.create(this.injector);
+    const componentRef = componentFactory.create(new DialogInjector(this.injector, map));
     this.appRef.attachView(componentRef.hostView);
 
     const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
@@ -37,9 +43,10 @@ export class DialogService {
     this.dialogComponentRef.destroy();
   }
 
-  public open(componentType: Type<any>) {
-    this.appendDialogComponentToBody();
+  public open(componentType: Type<any>, config: DialogConfig) {
+    this.appendDialogComponentToBody(config);
 
     this.dialogComponentRef.instance.childComponentType = componentType;
+
   }
 }
